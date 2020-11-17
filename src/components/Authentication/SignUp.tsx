@@ -17,7 +17,7 @@ import {AuthForm} from "./AuthForm";
 import {FormTypeEnum} from "./Authentication";
 
 type SignUpProps = {
-    onChange: Function,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>)=>void,
     onChangeFormType: Function,
     username: string,
     email: string,
@@ -25,32 +25,32 @@ type SignUpProps = {
     passwordConfirm: string
 }
 
-
 const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-    },
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
 }));
-export const SignIn: React.FC<SignUpProps> =
+export const SignUp: React.FC<SignUpProps> =
     ({onChange, onChangeFormType, username, email, password, passwordConfirm}) => {
         const classes = useStyles();
         return (
-            <AuthForm header={'Sign In'}>
+            <AuthForm header={'Sign Up'}>
                 <TextField
+                    value={username}
+                    onChange={onChange}
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Username"
+                    name="username"
+                    autoComplete="username"
+                    autoFocus
+                />
+                <TextField
+                    value={email}
+                    onChange={onChange}
                     variant="outlined"
                     margin="normal"
                     required
@@ -62,12 +62,27 @@ export const SignIn: React.FC<SignUpProps> =
                     autoFocus
                 />
                 <TextField
+                    value={password}
+                    onChange={onChange}
                     variant="outlined"
                     margin="normal"
                     required
                     fullWidth
                     name="password"
                     label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                />
+                <TextField
+                    value={passwordConfirm}
+                    onChange={onChange}
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="passwordConfirm"
+                    label="Password confirm"
                     type="password"
                     id="password"
                     autoComplete="current-password"
@@ -83,12 +98,17 @@ export const SignIn: React.FC<SignUpProps> =
                     color="primary"
                     className={classes.submit}
                 >
-                    Sign In
+                    Sign Up
                 </Button>
                 <Grid container>
                     <Grid item xs>
-                        <Link href="#" variant="body2">
-                            Forgot password?
+                        <Link
+                            component="button"
+                            variant="body2"
+                            type="button"
+                            onClick={() => console.log('Forgot password.')}
+                        >
+                            Forgot Password?
                         </Link>
                     </Grid>
                     <Grid item>
@@ -96,9 +116,9 @@ export const SignIn: React.FC<SignUpProps> =
                             component="button"
                             variant="body2"
                             type="button"
-                            onClick={() => onChangeFormType(FormTypeEnum.SignUp)}
+                            onClick={() => onChangeFormType(FormTypeEnum.SignIn)}
                         >
-                            Don't have an account? Sign Up
+                            Already have an account? Sign In
                         </Link>
                     </Grid>
                 </Grid>

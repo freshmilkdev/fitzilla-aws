@@ -1,6 +1,7 @@
 {
   "name": "Untitled GraphQL Schema",
-  "schemaPath": "schema.graphql",
+  "schemaPath": "amplify/backend/api/fitzillaawsapi/schema.graphql",
+  "includes": ["*.graphql"],
   "extensions": {
     "endpoints": {
       "Default GraphQL Endpoint": {
