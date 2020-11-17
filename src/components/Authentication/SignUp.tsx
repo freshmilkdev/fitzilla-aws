@@ -17,12 +17,13 @@ import {AuthForm} from "./AuthForm";
 import {FormTypeEnum} from "./Authentication";
 
 type SignUpProps = {
-    onChange: (e: React.ChangeEvent<HTMLInputElement>)=>void,
-    onChangeFormType: Function,
     username: string,
     email: string,
     password: string,
-    passwordConfirm: string
+    errors: any,
+    onSubmit: (formData: any) => void,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    onChangeFormType: Function
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -31,13 +32,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export const SignUp: React.FC<SignUpProps> =
-    ({onChange, onChangeFormType, username, email, password, passwordConfirm}) => {
+    ({username, email, password, errors, onSubmit, onChange, onChangeFormType,}) => {
         const classes = useStyles();
         return (
             <AuthForm header={'Sign Up'}>
                 <TextField
                     value={username}
                     onChange={onChange}
+                    error={errors.username || null}
+                    helperText={errors.username || null}
                     variant="outlined"
                     margin="normal"
                     required
@@ -51,6 +54,8 @@ export const SignUp: React.FC<SignUpProps> =
                 <TextField
                     value={email}
                     onChange={onChange}
+                    error={errors.email || null}
+                    helperText={errors.email || null}
                     variant="outlined"
                     margin="normal"
                     required
@@ -64,6 +69,8 @@ export const SignUp: React.FC<SignUpProps> =
                 <TextField
                     value={password}
                     onChange={onChange}
+                    error={errors.password || null}
+                    helperText={errors.password || null}
                     variant="outlined"
                     margin="normal"
                     required
@@ -74,29 +81,22 @@ export const SignUp: React.FC<SignUpProps> =
                     id="password"
                     autoComplete="current-password"
                 />
-                <TextField
-                    value={passwordConfirm}
-                    onChange={onChange}
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="passwordConfirm"
-                    label="Password confirm"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                />
+
                 <FormControlLabel
                     control={<Checkbox value="remember" color="primary"/>}
                     label="Remember me"
                 />
                 <Button
-                    type="submit"
+                    type="button"
                     fullWidth
                     variant="contained"
                     color="primary"
                     className={classes.submit}
+                    onClick={() => onSubmit({
+                        username,
+                        email,
+                        password
+                    })}
                 >
                     Sign Up
                 </Button>

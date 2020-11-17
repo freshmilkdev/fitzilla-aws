@@ -51,7 +51,7 @@ export const AuthForm: React.FC<AuthFormProps> =
                     <Typography component="h1" variant="h5">
                         {header}
                     </Typography>
-                    <form className={classes.form} noValidate>
+                    <form className={classes.form} noValidate onSubmit={(e) => e.preventDefault()}>
                         {children}
                     </form>
                 </div>

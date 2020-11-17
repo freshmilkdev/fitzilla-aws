@@ -15,11 +15,14 @@ import {makeStyles} from '@material-ui/core/styles';
 import {AuthForm} from "./AuthForm";
 import {FormTypeEnum} from "./Authentication";
 
+
 type SignInProps = {
-    onChange: (e: React.ChangeEvent<HTMLInputElement>)=>void,
-    onChangeFormType: Function,
     email: string,
     password: string,
+    errors: any,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    onSubmit: (formData: any) => void,
+    onChangeFormType: Function,
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -29,12 +32,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const SignIn: React.FC<SignInProps> =
-    ({onChange, onChangeFormType, email, password}) => {
+    ({onChangeFormType, email, password, errors, onSubmit, onChange}) => {
         const classes = useStyles();
         return (
             <AuthForm header={'Sign In'}>
                 <TextField
                     value={email}
+                    error={errors.email || null}
+                    helperText={errors.email || null}
                     onChange={onChange}
                     variant="outlined"
                     margin="normal"
@@ -48,6 +53,8 @@ export const SignIn: React.FC<SignInProps> =
                 />
                 <TextField
                     value={password}
+                    error={errors.password || null}
+                    helperText={errors.password || null}
                     onChange={onChange}
                     variant="outlined"
                     margin="normal"
@@ -64,7 +71,11 @@ export const SignIn: React.FC<SignInProps> =
                     label="Remember me"
                 />
                 <Button
-                    type="submit"
+                    onClick={() => onSubmit({
+                        email,
+                        password
+                    })}
+                    type="button"
                     fullWidth
                     variant="contained"
                     color="primary"
