@@ -10,14 +10,14 @@ export enum FormTypeEnum {
 }
 
 type InitialFormStateType = {
-    username: string,
+    name: string,
     password: string
     email: string,
     verificationCode: string,
     formType: FormTypeEnum
 }
 const initialFormState: InitialFormStateType = {
-    username: '',
+    name: '',
     password: '',
     email: '',
     verificationCode: '',
@@ -29,6 +29,7 @@ type TmpErrorsType = {
 export const Authentication: React.FC = () => {
     const [formState, updateFormState] = useState<InitialFormStateType>(initialFormState);
     const [formErrors, setFormErrors] = useState({} as any);
+    const {formType, name, email, password} = formState;
 
     function validateAll(formData: any) {
         // let key: keyof typeof formData;
@@ -36,26 +37,43 @@ export const Authentication: React.FC = () => {
         for (let key in formData) {
             if (formState.hasOwnProperty(key)) {
                 const value = formData[key];
-                tmpErrors[key] = validateField(key, value);
+                const validationResult = validateField(key, value);
+                if (validationResult) {
+                    tmpErrors[key] = validationResult;
+                }
             }
         }
-        if (Object.keys(tmpErrors).length) {
-            setFormErrors(tmpErrors);
-        }
+        setFormErrors(tmpErrors);
+        return !Object.keys(tmpErrors).length;
     }
 
     function validateField(name: string, value: string) {
         switch (name) {
-            case 'username':
+            case 'name':
                 return value.length ? false : 'Required field';
             case 'email':
                 return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value) ? false : 'Please enter valid email';
             case 'password':
                 return value.length ? false : 'Required field';
             case 'verificationCode':
-                return value.length ? false : 'Required field';
+                return value.length && value.length >= 6 ? false : 'Required field';
             default:
                 return false;
+        }
+    }
+
+    async function signUp() {
+        if (validateAll({name, email, password})) {
+            try {
+                const {user} = await Auth.signUp({
+                    username: email,
+                    password,
+                    attributes: {email, name}
+                });
+                console.log(user);
+            } catch (error) {
+                console.log('error signing up:', error);
+            }
         }
     }
 
@@ -71,7 +89,6 @@ export const Authentication: React.FC = () => {
         updateFormState(() => ({...formState, formType: type}));
     }
 
-    const {formType} = formState;
 
     function renderForm() {
         switch (formType) {
@@ -81,11 +98,10 @@ export const Authentication: React.FC = () => {
                                {...formState}/>
             }
             case FormTypeEnum.SignUp: {
-                return <SignUp errors={formErrors} onSubmit={validateAll} onChange={onChange}
+                return <SignUp errors={formErrors} onSubmit={signUp} onChange={onChange}
                                onChangeFormType={onChangeFormType}
                                {...formState}/>
             }
-
         }
     }
 

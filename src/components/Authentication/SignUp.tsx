@@ -17,11 +17,11 @@ import {AuthForm} from "./AuthForm";
 import {FormTypeEnum} from "./Authentication";
 
 type SignUpProps = {
-    username: string,
+    name: string,
     email: string,
     password: string,
     errors: any,
-    onSubmit: (formData: any) => void,
+    onSubmit: () => void,
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
     onChangeFormType: Function
 }
@@ -32,23 +32,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export const SignUp: React.FC<SignUpProps> =
-    ({username, email, password, errors, onSubmit, onChange, onChangeFormType,}) => {
+    ({name, email, password, errors, onSubmit, onChange, onChangeFormType,}) => {
         const classes = useStyles();
         return (
             <AuthForm header={'Sign Up'}>
                 <TextField
-                    value={username}
+                    value={name}
                     onChange={onChange}
-                    error={errors.username || null}
-                    helperText={errors.username || null}
+                    error={errors.name || null}
+                    helperText={errors.name || null}
                     variant="outlined"
                     margin="normal"
                     required
                     fullWidth
                     id="email"
-                    label="Username"
-                    name="username"
-                    autoComplete="username"
+                    label="Name"
+                    name="name"
+                    autoComplete="name"
                     autoFocus
                 />
                 <TextField
@@ -92,11 +92,7 @@ export const SignUp: React.FC<SignUpProps> =
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                    onClick={() => onSubmit({
-                        username,
-                        email,
-                        password
-                    })}
+                    onClick={onSubmit}
                 >
                     Sign Up
                 </Button>
