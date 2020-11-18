@@ -2,34 +2,49 @@ import React, {useState} from 'react';
 import {Auth, Hub} from 'aws-amplify';
 import {SignIn} from "./SignIn";
 import {SignUp} from "./SignUp";
+import {ConfirmSignUp} from "./ConfirmSignUp";
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 export enum FormTypeEnum {
     SignIn = "SIGN_IN",
     SignUp = "SIGN_UP",
-    Verification = "VERIFICATION",
+    ConfirmSignUp = "VERIFICATION",
 }
 
 type InitialFormStateType = {
     name: string,
     password: string
     email: string,
-    verificationCode: string,
+    authCode: string,
     formType: FormTypeEnum
+}
+
+export interface IAuthError {
+    code: string,
+    message: string,
+    name: string
+}
+
+type TmpErrorsType = {
+    [key: string]: boolean | null | undefined | string
 }
 const initialFormState: InitialFormStateType = {
     name: '',
     password: '',
     email: '',
-    verificationCode: '',
+    authCode: '',
     formType: FormTypeEnum.SignIn
 }
-type TmpErrorsType = {
-    [key: string]: boolean | null | undefined | string
-}
+
+const requiredFieldValidator = (value: string): string | boolean => value.length ? false : 'Required field';
+const minLengthValidator = (value: string, min: number): string | boolean => value.length >= min ? false : `Minimum length: ${min}`;
+const emailValidator = (value: string): string | boolean => /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value) ? false : 'Please enter valid email';
 export const Authentication: React.FC = () => {
     const [formState, updateFormState] = useState<InitialFormStateType>(initialFormState);
     const [formErrors, setFormErrors] = useState({} as any);
-    const {formType, name, email, password} = formState;
+    const [authError, setAuthError] = useState<IAuthError | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
+    const {formType, name, email, password, authCode} = formState;
 
     function validateAll(formData: any) {
         // let key: keyof typeof formData;
@@ -50,13 +65,13 @@ export const Authentication: React.FC = () => {
     function validateField(name: string, value: string) {
         switch (name) {
             case 'name':
-                return value.length ? false : 'Required field';
+                return requiredFieldValidator(value);
             case 'email':
-                return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value) ? false : 'Please enter valid email';
+                return emailValidator(email);
             case 'password':
-                return value.length ? false : 'Required field';
-            case 'verificationCode':
-                return value.length && value.length >= 6 ? false : 'Required field';
+                return requiredFieldValidator(value) || minLengthValidator(value, 8);
+            case 'authCode':
+                return requiredFieldValidator(value) || minLengthValidator(value, 6);
             default:
                 return false;
         }
@@ -64,46 +79,102 @@ export const Authentication: React.FC = () => {
 
     async function signUp() {
         if (validateAll({name, email, password})) {
+            setAuthError(null);
             try {
+                setLoading(true);
                 const {user} = await Auth.signUp({
                     username: email,
                     password,
                     attributes: {email, name}
                 });
+                updateFormState(() => ({...formState, formType: FormTypeEnum.ConfirmSignUp}));
                 console.log(user);
             } catch (error) {
-                console.log('error signing up:', error);
+                console.log('Error signing up:', error);
+                setAuthError(error);
             }
+            setLoading(false);
+        }
+    }
+
+    async function confirmSignUp() {
+        if (validateAll({authCode})) {
+            setAuthError(null);
+            setLoading(true);
+            try {
+                await Auth.confirmSignUp(email, authCode);
+                console.log('Confirmed');
+                updateFormState(() => ({...formState, formType: FormTypeEnum.SignIn}));
+                //TODO: redirect to home
+            } catch (error) {
+                console.log('Error confirm sign up:', error);
+                setAuthError(error);
+            }
+            setLoading(false);
+        }
+    }
+
+    async function signIn() {
+        if (validateAll({email, password})) {
+            setAuthError(null);
+            setLoading(true);
+            try {
+                const user = await Auth.signIn(email, password);
+                console.log(user);
+            } catch (error) {
+                console.log('Error signing in', error);
+                setAuthError(error);
+            }
+            setLoading(false);
         }
     }
 
     function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-        updateFormState(() => ({...formState, [e.target.name]: e.target.value}));
+        const {name, value} = e.target;
+        updateFormState(() => ({...formState, [name]: value}));
         if (Object.keys(formErrors).length) {
-            setFormErrors(() => ({...formErrors, [e.target.name]: validateField(e.target.name, e.target.value)}));
+            setFormErrors(() => ({...formErrors, [name]: validateField(name, value)}));
         }
+    }
 
+    function onBlur(e: React.ChangeEvent<HTMLInputElement>) {
+        const {name, value} = e.target;
+        if (Object.keys(formErrors).length) {
+            setFormErrors(() => ({...formErrors, [name]: validateField(name, value)}));
+        }
     }
 
     function onChangeFormType(type: FormTypeEnum) {
         updateFormState(() => ({...formState, formType: type}));
+        setAuthError(null);
     }
 
 
     function renderForm() {
         switch (formType) {
             case FormTypeEnum.SignIn: {
-                return <SignIn errors={formErrors} onSubmit={validateAll} onChange={onChange}
+                return <SignIn authError={authError} errors={formErrors} onSubmit={signIn} onChange={onChange}
+                               onBlur={onBlur}
                                onChangeFormType={onChangeFormType}
                                {...formState}/>
             }
             case FormTypeEnum.SignUp: {
-                return <SignUp errors={formErrors} onSubmit={signUp} onChange={onChange}
+                return <SignUp authError={authError} errors={formErrors} onSubmit={signUp} onChange={onChange}
+                               onBlur={onBlur}
                                onChangeFormType={onChangeFormType}
                                {...formState}/>
+            }
+            case FormTypeEnum.ConfirmSignUp: {
+                return <ConfirmSignUp authCode={authCode} authError={authError} errors={formErrors}
+                                      onBlur={onBlur}
+                                      onSubmit={confirmSignUp}
+                                      onChange={onChange}/>
             }
         }
     }
 
-    return <div>{renderForm()}</div>
+    return <div>
+        {loading && <LinearProgress/>}
+        {renderForm()}
+    </div>
 }

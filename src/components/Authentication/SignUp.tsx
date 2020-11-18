@@ -1,28 +1,25 @@
 import React from 'react';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+
 import {AuthForm} from "./AuthForm";
-import {FormTypeEnum} from "./Authentication";
+import {FormTypeEnum, IAuthError} from "./Authentication";
+import {Typography} from "@material-ui/core";
 
 type SignUpProps = {
     name: string,
     email: string,
     password: string,
     errors: any,
+    authError: IAuthError | null,
     onSubmit: () => void,
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    onBlur: (e: React.FocusEvent<HTMLInputElement>) => void,
     onChangeFormType: Function
 }
 
@@ -32,13 +29,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export const SignUp: React.FC<SignUpProps> =
-    ({name, email, password, errors, onSubmit, onChange, onChangeFormType,}) => {
+    ({name, email, password, errors, authError, onSubmit, onChange, onBlur, onChangeFormType}) => {
         const classes = useStyles();
         return (
             <AuthForm header={'Sign Up'}>
                 <TextField
                     value={name}
                     onChange={onChange}
+                    onBlur={onBlur}
                     error={errors.name || null}
                     helperText={errors.name || null}
                     variant="outlined"
@@ -54,6 +52,7 @@ export const SignUp: React.FC<SignUpProps> =
                 <TextField
                     value={email}
                     onChange={onChange}
+                    onBlur={onBlur}
                     error={errors.email || null}
                     helperText={errors.email || null}
                     variant="outlined"
@@ -69,6 +68,7 @@ export const SignUp: React.FC<SignUpProps> =
                 <TextField
                     value={password}
                     onChange={onChange}
+                    onBlur={onBlur}
                     error={errors.password || null}
                     helperText={errors.password || null}
                     variant="outlined"
@@ -82,6 +82,7 @@ export const SignUp: React.FC<SignUpProps> =
                     autoComplete="current-password"
                 />
 
+                {authError && <Typography color='error'>{authError.message}</Typography>}
                 <FormControlLabel
                     control={<Checkbox value="remember" color="primary"/>}
                     label="Remember me"

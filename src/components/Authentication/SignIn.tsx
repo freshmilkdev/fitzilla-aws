@@ -1,9 +1,5 @@
 import React from 'react';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -13,14 +9,17 @@ import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {AuthForm} from "./AuthForm";
-import {FormTypeEnum} from "./Authentication";
+import {FormTypeEnum, IAuthError} from "./Authentication";
+import {Typography} from "@material-ui/core";
 
 
 type SignInProps = {
     email: string,
     password: string,
     errors: any,
+    authError: IAuthError | null,
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+    onBlur: (e: React.FocusEvent<HTMLInputElement>) => void,
     onSubmit: (formData: any) => void,
     onChangeFormType: Function,
 }
@@ -32,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const SignIn: React.FC<SignInProps> =
-    ({onChangeFormType, email, password, errors, onSubmit, onChange}) => {
+    ({email, password, errors, authError, onSubmit, onChange, onBlur, onChangeFormType}) => {
         const classes = useStyles();
         return (
             <AuthForm header={'Sign In'}>
@@ -41,6 +40,7 @@ export const SignIn: React.FC<SignInProps> =
                     error={errors.email || null}
                     helperText={errors.email || null}
                     onChange={onChange}
+                    onBlur={onBlur}
                     variant="outlined"
                     margin="normal"
                     required
@@ -56,6 +56,7 @@ export const SignIn: React.FC<SignInProps> =
                     error={errors.password || null}
                     helperText={errors.password || null}
                     onChange={onChange}
+                    onBlur={onBlur}
                     variant="outlined"
                     margin="normal"
                     required
@@ -66,6 +67,7 @@ export const SignIn: React.FC<SignInProps> =
                     id="password"
                     autoComplete="current-password"
                 />
+                {authError && <Typography color='error'>{authError.message}</Typography>}
                 <FormControlLabel
                     control={<Checkbox value="remember" color="primary"/>}
                     label="Remember me"
