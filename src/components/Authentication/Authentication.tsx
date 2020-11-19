@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { useHistory } from "react-router-dom";
-import {Auth, Hub} from 'aws-amplify';
+import {Auth} from 'aws-amplify';
 import {SignIn} from "./SignIn";
 import {SignUp} from "./SignUp";
 import {ConfirmSignUp} from "./ConfirmSignUp";

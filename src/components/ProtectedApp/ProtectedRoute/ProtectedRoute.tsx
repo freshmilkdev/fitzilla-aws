@@ -3,15 +3,15 @@ import React, {useState, useEffect, ReactNode} from "react"
 import {Redirect, Route, RouteComponentProps, RouteProps} from "react-router-dom";
 import {Auth} from 'aws-amplify';
 import routes from "../../../config/routes";
+import {ProtectedApp} from "../ProtectedApp";
 
 type RouteComponent = React.FunctionComponent<RouteComponentProps<{}>> | React.ComponentClass<any>
 
-export const PrivateRoute: React.FunctionComponent<RouteProps> = ({component, ...rest}) => {
+export const ProtectedRoute: React.FunctionComponent<RouteProps> = ({component, ...rest}) => {
     const [isAuthenticated, setIsAuthenticated] = useState(true);
     useEffect(() => {
         (async () => {
             let user = null;
-
             try {
                 user = await Auth.currentAuthenticatedUser()
                 setIsAuthenticated(!!user);
@@ -26,7 +26,7 @@ export const PrivateRoute: React.FunctionComponent<RouteProps> = ({component, ..
         }
 
         if (isAuthenticated) {
-            return <Component {...props} />
+            return <ProtectedApp><Component {...props} /></ProtectedApp>
         }
 
         const redirectProps = {

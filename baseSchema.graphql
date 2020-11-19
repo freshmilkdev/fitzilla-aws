@@ -36,7 +36,7 @@ type Exercise @model
     videoUrl: String
     imageUrl: String
     muscleGroupID: ID!
-    muscleGroup: MuscleGroup @connection(fields: ["muscleGroupID])
+    muscleGroup: MuscleGroup @connection(fields: ["muscleGroupID]")
 }
 
 type MuscleGroup @model 

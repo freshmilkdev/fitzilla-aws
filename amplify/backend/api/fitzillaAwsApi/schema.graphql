@@ -1,15 +1,11 @@
-type MuscleGroup @model 
- @auth(rules: [{ allow: owner }])
-{
+type MuscleGroup @model @auth(rules: [{ allow: owner }]) {
     id: ID!
     name: String!
     description: String
     exercises: [Exercise] @connection(keyName: "byMuscleGroup", fields: ["id"])
 }
 
-type Exercise @model
-    @auth(rules: [{ allow: owner }])
-    @key(name: "byMuscleGroup", fields: ["muscleGroupID"]) {
+type Exercise @model @auth(rules: [{ allow: owner }]) @key(name: "byMuscleGroup", fields: ["muscleGroupID"]) {
     id: ID!
     name: String!
     description: String
