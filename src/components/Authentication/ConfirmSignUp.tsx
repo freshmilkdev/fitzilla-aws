@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import {makeStyles} from '@material-ui/core/styles';
 import {AuthForm} from "./AuthForm";
-import {FormTypeEnum, IAuthError} from "./Authentication";
+import { IAuthError} from "./Authentication";
 import {Typography} from "@material-ui/core";
 
 type ConfirmSignUpProps = {

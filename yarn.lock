@@ -80,7 +80,7 @@
     url "^0.11.0"
     zen-observable-ts "0.8.19"
 
-"@aws-amplify/datastore@2.7.3":
+"@aws-amplify/datastore@2.7.3", "@aws-amplify/datastore@^2.7.3":
   version "2.7.3"
   resolved "https://registry.yarnpkg.com/@aws-amplify/datastore/-/datastore-2.7.3.tgz#87a814bfa24bc1f14ad840742af61f6c33573eca"
   integrity sha512-ZC0S34GLcxxtOwGC4XXYPP9jc0MH0KhtqC+JPdkUNtcq46WvQ8Vivco6r9JJRGdPY1ck8ZZUZbN18PdUk3E6fQ==

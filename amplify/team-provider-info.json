@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-fitzillaaws-dev-121827-authRole",
+      "UnauthRoleArn": "arn:aws:iam::049144601243:role/amplify-fitzillaaws-dev-121827-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::049144601243:role/amplify-fitzillaaws-dev-121827-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-fitzillaaws-dev-121827-deployment",
+      "UnauthRoleName": "amplify-fitzillaaws-dev-121827-unauthRole",
+      "StackName": "amplify-fitzillaaws-dev-121827",
+      "StackId": "arn:aws:cloudformation:us-east-1:049144601243:stack/amplify-fitzillaaws-dev-121827/eb001420-272b-11eb-af71-0e007e135db7",
+      "AmplifyAppId": "d2i14asdvvuj7d"
+    },
+    "categories": {
+      "auth": {
+        "fitzillaaws8c5136b4": {}
+      }
+    }
+  }
+}

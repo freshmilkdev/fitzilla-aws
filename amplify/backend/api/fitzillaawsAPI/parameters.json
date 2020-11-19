@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "fitzillaawsAPI",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authfitzillaaws8c5136b4",
+            "Outputs.UserPoolId"
+        ]
+    }
+}

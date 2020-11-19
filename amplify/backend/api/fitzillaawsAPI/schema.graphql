@@ -1,0 +1,16 @@
+type MuscleGroup @model {
+    id: ID!
+    name: String!
+    description: String
+    exercises: [Exercise] @connection(name: "MuscleGroupExercises")
+}
+
+type Exercise @model
+    @auth(rules: [{ allow: owner }]) {
+    id: ID!
+    name: String!
+    description: String
+    videoUrl: String
+    imageUrl: String
+    muscleGroup: MuscleGroup @connection(name: "MuscleGroupExercises")
+}
