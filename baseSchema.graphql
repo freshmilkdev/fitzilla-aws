@@ -38,3 +38,24 @@ type Exercise @model
     muscleGroupID: ID!
     muscleGroup: MuscleGroup @connection(fields: ["muscleGroupID])
 }
+
+type MuscleGroup @model 
+ @auth(rules: [{ allow: owner }])
+{
+    id: ID!
+    name: String!
+    description: String
+    exercises: [Exercise] @connection(keyName: "byMuscleGroup", fields: ["id"])
+}
+
+type Exercise @model
+    @auth(rules: [{ allow: owner }])
+    @key(name: "byMuscleGroup", fields: ["muscleGroupID"]) {
+    id: ID!
+    name: String!
+    description: String
+    videoUrl: String
+    imageUrl: String
+    muscleGroupID: ID!
+    muscleGroup: MuscleGroup @connection(fields: ["muscleGroupID"])
+}

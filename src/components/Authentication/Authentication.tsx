@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
+import { useHistory } from "react-router-dom";
 import {Auth, Hub} from 'aws-amplify';
 import {SignIn} from "./SignIn";
 import {SignUp} from "./SignUp";
 import {ConfirmSignUp} from "./ConfirmSignUp";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import useValidation from "./useValidation";
+import routes from "../../config/routes";
 
 export enum FormTypeEnum {
     SignIn = "SIGN_IN",
@@ -41,7 +43,7 @@ export const Authentication: React.FC = () => {
     const [authError, setAuthError] = useState<IAuthError | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const {formType, name, email, password, authCode} = formState;
-
+    let history = useHistory();
     async function signUp() {
         if (validateAll({name, email, password})) {
             setAuthError(null);
@@ -70,7 +72,6 @@ export const Authentication: React.FC = () => {
                 await Auth.confirmSignUp(email, authCode);
                 console.log('Confirmed');
                 updateFormState(() => ({...formState, formType: FormTypeEnum.SignIn}));
-                //TODO: redirect to home
             } catch (error) {
                 console.log('Error confirm sign up:', error);
                 setAuthError(error);
@@ -86,6 +87,7 @@ export const Authentication: React.FC = () => {
             try {
                 const user = await Auth.signIn(email, password);
                 console.log(user);
+                history.push(routes.HOME_PAGE.path);
             } catch (error) {
                 console.log('Error signing in', error);
                 setAuthError(error);
