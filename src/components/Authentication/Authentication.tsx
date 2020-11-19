@@ -4,6 +4,7 @@ import {SignIn} from "./SignIn";
 import {SignUp} from "./SignUp";
 import {ConfirmSignUp} from "./ConfirmSignUp";
 import LinearProgress from '@material-ui/core/LinearProgress';
+import useValidation from "./useValidation";
 
 export enum FormTypeEnum {
     SignIn = "SIGN_IN",
@@ -25,9 +26,6 @@ export interface IAuthError {
     name: string
 }
 
-type TmpErrorsType = {
-    [key: string]: boolean | null | undefined | string
-}
 const initialFormState: InitialFormStateType = {
     name: '',
     password: '',
@@ -36,46 +34,13 @@ const initialFormState: InitialFormStateType = {
     formType: FormTypeEnum.SignIn
 }
 
-const requiredFieldValidator = (value: string): string | boolean => value.length ? false : 'Required field';
-const minLengthValidator = (value: string, min: number): string | boolean => value.length >= min ? false : `Minimum length: ${min}`;
-const emailValidator = (value: string): string | boolean => /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value) ? false : 'Please enter valid email';
+
 export const Authentication: React.FC = () => {
     const [formState, updateFormState] = useState<InitialFormStateType>(initialFormState);
-    const [formErrors, setFormErrors] = useState({} as any);
+    const [formErrors, setFormErrors, validateAll, validateField] = useValidation();
     const [authError, setAuthError] = useState<IAuthError | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const {formType, name, email, password, authCode} = formState;
-
-    function validateAll(formData: any) {
-        // let key: keyof typeof formData;
-        let tmpErrors: TmpErrorsType = {};
-        for (let key in formData) {
-            if (formState.hasOwnProperty(key)) {
-                const value = formData[key];
-                const validationResult = validateField(key, value);
-                if (validationResult) {
-                    tmpErrors[key] = validationResult;
-                }
-            }
-        }
-        setFormErrors(tmpErrors);
-        return !Object.keys(tmpErrors).length;
-    }
-
-    function validateField(name: string, value: string) {
-        switch (name) {
-            case 'name':
-                return requiredFieldValidator(value);
-            case 'email':
-                return emailValidator(email);
-            case 'password':
-                return requiredFieldValidator(value) || minLengthValidator(value, 8);
-            case 'authCode':
-                return requiredFieldValidator(value) || minLengthValidator(value, 6);
-            default:
-                return false;
-        }
-    }
 
     async function signUp() {
         if (validateAll({name, email, password})) {
