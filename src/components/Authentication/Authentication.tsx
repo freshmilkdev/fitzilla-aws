@@ -84,7 +84,7 @@ export const Authentication: React.FC = () => {
             setAuthError(null);
             setLoading(true);
             try {
-                const user = await Auth.signIn(email, password);
+                await Auth.signIn(email, password);
                 return history.push(routes.HOME_PAGE.path);
             } catch (error) {
                 console.log('Error signing in', error);

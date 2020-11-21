@@ -6,6 +6,7 @@ import routes from "./config/routes";
 import {Authentication} from './components/Authentication/Authentication';
 import {Home} from "./components/ProtectedApp/Home/Home";
 import {ProtectedRoute} from "./components/ProtectedApp/ProtectedRoute/ProtectedRoute";
+import {Exercises} from "./components/ProtectedApp/Exercises/Exercises";
 
 Amplify.configure(config);
 
@@ -14,6 +15,7 @@ function App() {
         <Switch>
             <Route path={routes.AUTH.path} exact component={Authentication}/>
             <ProtectedRoute path={routes.HOME_PAGE.path} exact component={Home}/>
+            <ProtectedRoute path={routes.EXERCISES.path} exact component={Exercises}/>
         </Switch>
     );
 }

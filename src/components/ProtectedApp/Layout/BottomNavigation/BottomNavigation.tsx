@@ -33,7 +33,7 @@ export default function BottomNavigation() {
             className={classes.root}
         >
             <BottomNavigationAction icon={<HomeIcon/>} value={routes.HOME_PAGE.path}/>
-            <BottomNavigationAction icon={<FitnessCenterIcon/>} value={routes.WORKOUT.path}/>
+            <BottomNavigationAction icon={<FitnessCenterIcon/>} value={routes.EXERCISES.path}/>
             <BottomNavigationAction icon={<HistoryIcon/>} value={routes.WORKOUT_HISTORY.path}/>
         </BottomNav>
     );

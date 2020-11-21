@@ -1,10 +1,6 @@
 import React from 'react';
-import {Layout} from "../Layout/Layout";
-
-export const Home = () => {
+export const Home: React.FC = () => {
     return (
-        <Layout>
-            <div>Home</div>
-        </Layout>
+        <div>Home</div>
     )
 };

@@ -30,9 +30,22 @@ export const createMuscleGroups = createAsyncThunk('muscleGroups/createMuscleGro
 interface ICreateMuscleGroupData {
     data: ICreateMuscleGroup
 }*/
-
+export interface IExercise {
+    id: string,
+    name: string
+}
+export interface IExercisesList {
+    items: Array<IExercise>
+}
+export interface IMuscleGroup {
+    id: string,
+    name: string,
+    description?: string,
+    exercises: IExercisesList,
+    createdAt: string
+}
 interface IMuscleGroupsState {
-    items: Array<object>
+    items: Array<IMuscleGroup>
     loading: boolean,
     error: boolean
 }
