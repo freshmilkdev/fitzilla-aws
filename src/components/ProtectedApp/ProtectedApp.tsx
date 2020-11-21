@@ -1,14 +1,29 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, createContext} from 'react';
+
 import {useMuscleGroups} from "./useMuscleGroups";
+import {IAuthUser, useAuthenticatedUser} from "../Authentication/useAuthenticatedUser";
 // import {CreateExerciseInput, CreateMuscleGroupInput, ListMuscleGroupsQuery} from "../../API";
 
 type ProtectedAppProps = {
     children: React.ReactNode | null
 };
 
+export interface IAuthContext {
+    authUser: IAuthUser | null,
+    signOut: Function
+};
+
+export const AuthContext = createContext<IAuthContext>({
+    authUser: null,
+    signOut: () => {
+    }
+});
 
 export const ProtectedApp: React.FC<ProtectedAppProps> = ({children}) => {
+    const [authUser, signOut] = useAuthenticatedUser();
+
     const muscleGroups = useMuscleGroups();
+    console.log(authUser);
     /*    useEffect(() => {
             /!* (async () => {
 
@@ -23,5 +38,5 @@ export const ProtectedApp: React.FC<ProtectedAppProps> = ({children}) => {
     useEffect(() => {
         console.log(muscleGroups);
     }, [muscleGroups]);
-    return <div>{children}</div>;
+    return <AuthContext.Provider value={{authUser, signOut}}>{children}</AuthContext.Provider>;
 }

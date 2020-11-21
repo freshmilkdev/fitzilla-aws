@@ -36,7 +36,6 @@ const initialFormState: InitialFormStateType = {
     formType: FormTypeEnum.SignIn
 }
 
-
 export const Authentication: React.FC = () => {
     const [formState, updateFormState] = useState<InitialFormStateType>(initialFormState);
     const [formErrors, setFormErrors, validateAll, validateField] = useValidation();
@@ -86,8 +85,7 @@ export const Authentication: React.FC = () => {
             setLoading(true);
             try {
                 const user = await Auth.signIn(email, password);
-                console.log(user);
-                history.push(routes.HOME_PAGE.path);
+                return history.push(routes.HOME_PAGE.path);
             } catch (error) {
                 console.log('Error signing in', error);
                 setAuthError(error);
