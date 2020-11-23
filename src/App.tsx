@@ -2,7 +2,7 @@ import React from 'react';
 import {Switch, Route} from 'react-router-dom';
 import Amplify from 'aws-amplify';
 import config from './aws-exports';
-import routes from "./config/routes";
+import {routes} from "./config/routes";
 import {Authentication} from './components/Authentication/Authentication';
 import {Home} from "./components/ProtectedApp/Home/Home";
 import {ProtectedRoute} from "./components/ProtectedApp/ProtectedRoute/ProtectedRoute";

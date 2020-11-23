@@ -7,12 +7,14 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Badge from "@material-ui/core/Badge";
 import {IMuscleGroup} from "../../../../redux/slices/muscleGroups";
+import {MuscleGroupIcon} from "./MuscleGroupIcon";
+import {Box} from "@material-ui/core";
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-        overflowX: 'hidden',
+        overflow: 'hidden',
         borderBottom: `1px solid ${theme.palette.grey['300']}`
     },
     accordionSummaryContent: {
@@ -20,8 +22,9 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
     },
     heading: {
-        fontSize: theme.typography.pxToRem(15),
+        fontSize: theme.typography.pxToRem(18),
         fontWeight: theme.typography.fontWeightRegular,
+        marginLeft: theme.spacing(2)
     },
 }));
 export const MuscleGroup: React.FC<IMuscleGroup> = ({id, name, exercises}: IMuscleGroup) => {
@@ -37,10 +40,13 @@ export const MuscleGroup: React.FC<IMuscleGroup> = ({id, name, exercises}: IMusc
                 aria-controls={`panel${id}-content`}
                 id={`panel${id}-header`}
             >
-                {/*<Box alignItems='center' justifyContent={'space-between'}>*/}
+
+                <Box alignItems='center' display='flex' flexGrow={1}>
+                    <MuscleGroupIcon muscleGroup={name}/>
                     <Typography className={classes.heading}>{name}</Typography>
-                    <Badge badgeContent={Object.keys(exercises.items).length.toString()}/>
-                {/*</Box>*/}
+                </Box>
+
+                <Badge color='secondary' badgeContent={Object.keys(exercises.items).length.toString()}/>
             </AccordionSummary>
             <AccordionDetails>
                 <Typography>

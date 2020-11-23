@@ -1,8 +1,8 @@
-import React, {useState, useEffect, ReactNode} from "react"
+import React, {useState, useEffect} from "react"
 // @ts-ignore
 import {Redirect, Route, RouteComponentProps, RouteProps} from "react-router-dom";
 import {Auth} from 'aws-amplify';
-import routes from "../../../config/routes";
+import {routes} from "../../../config/routes";
 import {ProtectedApp} from "../ProtectedApp";
 
 type RouteComponent = React.FunctionComponent<RouteComponentProps<{}>> | React.ComponentClass<any>

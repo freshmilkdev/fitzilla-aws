@@ -6,7 +6,7 @@ type TmpErrorsType = {
 const requiredFieldValidator = (value: string): string | boolean => value.length ? false : 'Required field';
 const minLengthValidator = (value: string, min: number): string | boolean => value.length >= min ? false : `Minimum length: ${min}`;
 const emailValidator = (value: string): string | boolean => /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value) ? false : 'Please enter valid email';
-export default () => {
+export const useValidation = () => {
     const [formErrors, setFormErrors] = useState({} as any);
 
     function validateAll(formData: any): boolean {

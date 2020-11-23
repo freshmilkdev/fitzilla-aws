@@ -1,4 +1,4 @@
-import React, {useEffect, createContext} from 'react';
+import React, {createContext} from 'react';
 
 import {useMuscleGroups} from "./useMuscleGroups";
 import {IAuthUser, useAuthenticatedUser} from "../Authentication/useAuthenticatedUser";
@@ -22,7 +22,7 @@ export const AuthContext = createContext<IAuthContext>({
 
 export const ProtectedApp: React.FC<ProtectedAppProps> = ({children}) => {
     const [authUser, signOut] = useAuthenticatedUser();
-    const muscleGroups = useMuscleGroups();
+    useMuscleGroups();
 
     /*    useEffect(() => {
             /!* (async () => {

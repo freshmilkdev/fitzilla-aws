@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Auth} from "aws-amplify";
 
-import routes from "../../config/routes";
+import {routes} from "../../config/routes";
 import {useHistory} from "react-router-dom";
 
 export interface IAuthUser {

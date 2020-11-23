@@ -6,7 +6,7 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import HomeIcon from '@material-ui/icons/Home';
 import FitnessCenterIcon from '@material-ui/icons/FitnessCenter';
 import HistoryIcon from '@material-ui/icons/History';
-import routes from "../../../../config/routes";
+import {routes} from "../../../../config/routes";
 
 const useStyles = makeStyles({
     root: {

@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {Auth} from 'aws-amplify';
 import {SignIn} from "./SignIn";
 import {SignUp} from "./SignUp";
 import {ConfirmSignUp} from "./ConfirmSignUp";
 import LinearProgress from '@material-ui/core/LinearProgress';
-import useValidation from "./useValidation";
-import routes from "../../config/routes";
+import {useValidation} from "./useValidation";
+import {routes} from "../../config/routes";
 
 export enum FormTypeEnum {
     SignIn = "SIGN_IN",
@@ -43,6 +43,7 @@ export const Authentication: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const {formType, name, email, password, authCode} = formState;
     let history = useHistory();
+
     async function signUp() {
         if (validateAll({name, email, password})) {
             setAuthError(null);

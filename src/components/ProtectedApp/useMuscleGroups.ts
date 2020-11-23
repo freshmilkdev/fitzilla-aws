@@ -1,11 +1,10 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 import {useAppDispatch} from "../../redux/store";
 import {useSelector} from "react-redux";
 import {RootState} from "../../redux/rootReducer";
-import {createMuscleGroups, fetchMuscleGroups} from "../../redux/slices/muscleGroups";
+import {createMuscleGroups, fetchMuscleGroups, IMuscleGroup} from "../../redux/slices/muscleGroups";
 
-
-export const useMuscleGroups = () => {
+export const useMuscleGroups = (): Array<IMuscleGroup> => {
     const dispatch = useAppDispatch();
     const muscleGroups = useSelector((state: RootState) => state.muscleGroups.items);
 
