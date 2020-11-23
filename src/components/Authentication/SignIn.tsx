@@ -37,7 +37,7 @@ export const SignIn: React.FC<SignInProps> =
             <AuthForm header={'Sign In'}>
                 <TextField
                     value={email}
-                    error={errors.email || null}
+                    error={!!errors.email}
                     helperText={errors.email || null}
                     onChange={onChange}
                     onBlur={onBlur}
@@ -53,7 +53,7 @@ export const SignIn: React.FC<SignInProps> =
                 />
                 <TextField
                     value={password}
-                    error={errors.password || null}
+                    error={!!errors.password}
                     helperText={errors.password || null}
                     onChange={onChange}
                     onBlur={onBlur}

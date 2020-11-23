@@ -9,6 +9,8 @@ import {IMuscleGroup} from "../../../redux/slices/muscleGroups";
 import {MuscleGroup} from "./MuscleGroup/MuscleGroup";
 
 import {MuscleGroupSkeleton} from "./MuscleGroup/MuscleGroupSkeleton";
+import {Link} from "react-router-dom";
+import {routes} from "../../../config/routes";
 
 let muscleGroupsSkeleton = Array(6).fill("");
 const useStyles = makeStyles((theme) => ({
@@ -24,11 +26,13 @@ export const Exercises: React.FC = () => {
     const classes = useStyles();
     return <>
         {loading ?
-                muscleGroupsSkeleton.map((v, i) => <MuscleGroupSkeleton key={i}/>) :
-                (muscleGroups || []).map((group: IMuscleGroup) => <MuscleGroup {...group} key={group.id}/>)
+            muscleGroupsSkeleton.map((v, i) => <MuscleGroupSkeleton key={i}/>) :
+            (muscleGroups || []).map((group: IMuscleGroup) => <MuscleGroup {...group} key={group.id}/>)
         }
-        <Fab size="medium" color="secondary" aria-label="add" className={classes.fab}>
-            <AddIcon/>
-        </Fab>
+        <Link to={routes.EXERCISE.path}>
+            <Fab size="medium" color="secondary" aria-label="add" className={classes.fab}>
+                <AddIcon/>
+            </Fab>
+        </Link>
     </>
 };

@@ -25,7 +25,7 @@ export const useAuthenticatedUser = (): [IAuthUser | null, () => void] => {
     useEffect(() => {
         (async () => {
             const user = await Auth.currentUserInfo();
-            setAuthUser({...user.attributes});
+            if (user) setAuthUser({...user.attributes});
         })();
     }, []);
 

@@ -1,10 +1,12 @@
-import React, {createContext} from 'react';
+import React, {createContext, useEffect} from 'react';
 
-import {useMuscleGroups} from "./useMuscleGroups";
+import {useMuscleGroupsExercises} from "./useMuscleGroupsExercises";
 import {IAuthUser, useAuthenticatedUser} from "../Authentication/useAuthenticatedUser";
 import {Layout} from "./Layout/Layout";
+import {CreateExerciseInput} from "../../API";
+import * as mutations from "../../graphql/mutations";
 // import {CreateExerciseInput, CreateMuscleGroupInput, ListMuscleGroupsQuery} from "../../API";
-
+import {API} from "aws-amplify";
 type ProtectedAppProps = {
     children: React.ReactNode | null
 };
@@ -22,17 +24,17 @@ export const AuthContext = createContext<IAuthContext>({
 
 export const ProtectedApp: React.FC<ProtectedAppProps> = ({children}) => {
     const [authUser, signOut] = useAuthenticatedUser();
-    useMuscleGroups();
+    useMuscleGroupsExercises(authUser);
+/*
+        useEffect(() => {
+             (async () => {
 
-    /*    useEffect(() => {
-            /!* (async () => {
-
-                /!* const exercise: CreateExerciseInput = {
+                 const exercise: CreateExerciseInput = {
                      name: 'Pull Up',
-                     muscleGroupID: '99a1bdb8-5e76-487c-b164-4e5c149343bf'
+                     muscleGroupID: '9c9685e4-3ded-47d5-8ad9-8c7598be7aad'
                  };
-                 const newEx = await API.graphql({query: mutations.createExercise, variables: {input: exercise}});*!/
-             })();*!/
+                 const newEx = await API.graphql({query: mutations.createExercise, variables: {input: exercise}});
+             })();
 
         }, []);*/
 
