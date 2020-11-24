@@ -1,19 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from "@material-ui/core/Typography";
 import {makeStyles} from '@material-ui/core/styles';
 import {AuthForm} from "./AuthForm";
-import { IAuthError} from "./Authentication";
+import {IAuthError, ISignUpConfirmInput} from "./Authentication";
+import {Controller, useForm} from "react-hook-form";
 
 
 type ConfirmSignUpProps = {
-    authCode: string,
     authError: IAuthError | null,
-    errors: any,
-    onSubmit: () => void,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-    onBlur: (e: React.FocusEvent<HTMLInputElement>) => void,
+    onConfirm: Function
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -22,16 +19,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export const ConfirmSignUp: React.FC<ConfirmSignUpProps> =
-    ({ authCode, authError, errors, onSubmit, onChange, onBlur}) => {
+    ({authError, onConfirm}) => {
         const classes = useStyles();
+        const {handleSubmit, errors, control} = useForm<ISignUpConfirmInput>();
+        const onSubmit = (data: ISignUpConfirmInput) => onConfirm(data);
+
         return (
-            <AuthForm header={'Sign Up Confirmation'}>
-                <TextField
-                    value={authCode}
-                    onChange={onChange}
-                    onBlur={onBlur}
+            <AuthForm header={'Sign Up Confirmation'} onSubmit={handleSubmit(onSubmit)}>
+                <Controller
+                    defaultValue=""
+                    as={TextField}
+                    control={control}
+                    rules={{
+                        required: {value: true, message: 'Required field'},
+                        minLength: {value: 6, message: `Minimum length: 6`}
+                    }}
                     error={!!errors.authCode}
-                    helperText={errors.authCode || null}
+                    helperText={errors.authCode ? errors.authCode.message : null}
                     variant="outlined"
                     margin="normal"
                     required
@@ -42,14 +46,14 @@ export const ConfirmSignUp: React.FC<ConfirmSignUpProps> =
                     autoComplete="authCode"
                     autoFocus
                 />
+
                 {authError && <Typography color='error'>{authError.message}</Typography>}
                 <Button
-                    type="button"
+                    type="submit"
                     fullWidth
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                    onClick={onSubmit}
                 >
                     Confirm
                 </Button>

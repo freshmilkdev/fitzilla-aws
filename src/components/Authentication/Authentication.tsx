@@ -5,7 +5,6 @@ import {SignIn} from "./SignIn";
 import {SignUp} from "./SignUp";
 import {ConfirmSignUp} from "./ConfirmSignUp";
 import LinearProgress from '@material-ui/core/LinearProgress';
-import {useValidation} from "./useValidation";
 import {routes} from "../../config/routes";
 
 export enum FormTypeEnum {
@@ -15,10 +14,7 @@ export enum FormTypeEnum {
 }
 
 type InitialFormStateType = {
-    name: string,
-    password: string
     email: string,
-    authCode: string,
     formType: FormTypeEnum
 }
 
@@ -29,112 +25,96 @@ export interface IAuthError {
 }
 
 const initialFormState: InitialFormStateType = {
-    name: '',
-    password: '',
     email: '',
-    authCode: '',
     formType: FormTypeEnum.SignIn
+}
+
+export interface ISignUpFormInput {
+    email: string;
+    name: string;
+    password: string;
+}
+
+export interface ISignInFormInput {
+    email: string;
+    password: string;
+}
+
+export interface ISignUpConfirmInput {
+    authCode: string;
 }
 
 export const Authentication: React.FC = () => {
     const [formState, updateFormState] = useState<InitialFormStateType>(initialFormState);
-    const [formErrors, setFormErrors, validateAll, validateField] = useValidation();
     const [authError, setAuthError] = useState<IAuthError | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const {formType, name, email, password, authCode} = formState;
+    const {formType, email} = formState;
     let history = useHistory();
 
-    async function signUp() {
-        if (validateAll({name, email, password})) {
-            setAuthError(null);
-            try {
-                setLoading(true);
-                const {user} = await Auth.signUp({
-                    username: email,
-                    password,
-                    attributes: {email, name}
-                });
-                updateFormState(() => ({...formState, formType: FormTypeEnum.ConfirmSignUp}));
-                console.log(user);
-            } catch (error) {
-                console.log('Error signing up:', error);
-                setAuthError(error);
-            }
-            setLoading(false);
-        }
-    }
-
-    async function confirmSignUp() {
-        if (validateAll({authCode})) {
-            setAuthError(null);
+    async function signUp({email, name, password}: ISignUpFormInput) {
+        setAuthError(null);
+        try {
             setLoading(true);
-            try {
-                await Auth.confirmSignUp(email, authCode);
-                console.log('Confirmed');
-                updateFormState(() => ({...formState, formType: FormTypeEnum.SignIn}));
-            } catch (error) {
-                console.log('Error confirm sign up:', error);
-                setAuthError(error);
-            }
-            setLoading(false);
+            const {user} = await Auth.signUp({
+                username: email,
+                password,
+                attributes: {email, name}
+            });
+            updateFormState(() => ({...formState, formType: FormTypeEnum.ConfirmSignUp, email}));
+            console.log(user);
+        } catch (error) {
+            console.log('Error signing up:', error);
+            setAuthError(error);
         }
+        setLoading(false);
     }
 
-    async function signIn() {
-        if (validateAll({email, password})) {
-            setAuthError(null);
-            setLoading(true);
-            try {
-                await Auth.signIn(email, password);
-                return history.push(routes.HOME_PAGE.path);
-            } catch (error) {
-                console.log('Error signing in', error);
-                setAuthError(error);
-            }
-            setLoading(false);
+    async function confirmSignUp({authCode}: ISignUpConfirmInput) {
+        setAuthError(null);
+        setLoading(true);
+        try {
+            await Auth.confirmSignUp(email, authCode);
+            console.log('Confirmed');
+            updateFormState(() => ({...formState, formType: FormTypeEnum.SignIn}));
+        } catch (error) {
+            console.log('Error confirm sign up:', error);
+            setAuthError(error);
         }
+        setLoading(false);
     }
 
-    function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const {name, value} = e.target;
-        updateFormState(() => ({...formState, [name]: value}));
-        if (Object.keys(formErrors).length) {
-            setFormErrors(() => ({...formErrors, [name]: validateField(name, value)}));
+    async function signIn({email, password}: ISignInFormInput) {
+        setAuthError(null);
+        setLoading(true);
+        try {
+            await Auth.signIn(email, password);
+            return history.push(routes.HOME_PAGE.path);
+        } catch (error) {
+            console.log('Error signing in', error);
+            setAuthError(error);
         }
-    }
-
-    function onBlur(e: React.ChangeEvent<HTMLInputElement>) {
-        const {name, value} = e.target;
-        if (Object.keys(formErrors).length) {
-            setFormErrors(() => ({...formErrors, [name]: validateField(name, value)}));
-        }
+        setLoading(false);
     }
 
     function onChangeFormType(type: FormTypeEnum) {
-        updateFormState(() => ({...formState, formType: type}));
+        updateFormState(() => ({...formState, formType: type, email}));
         setAuthError(null);
     }
-
 
     function renderForm() {
         switch (formType) {
             case FormTypeEnum.SignIn: {
-                return <SignIn authError={authError} errors={formErrors} onSubmit={signIn} onChange={onChange}
-                               onBlur={onBlur}
-                               onChangeFormType={onChangeFormType}
-                               {...formState}/>
+                return <SignIn authError={authError} onSignIn={signIn}
+                               email={email}
+                               onChangeFormType={onChangeFormType}/>
             }
             case FormTypeEnum.SignUp: {
-                return <SignUp authError={authError} errors={formErrors} onSubmit={signUp} onChange={onChange}
-                               onBlur={onBlur}
-                               onChangeFormType={onChangeFormType}
-                               {...formState}/>
+                return <SignUp authError={authError} onSignUp={signUp} email={email}
+                               onChangeFormType={onChangeFormType}/>
             }
             case FormTypeEnum.ConfirmSignUp: {
-                return <ConfirmSignUp authCode={authCode} authError={authError} errors={formErrors}
-                                      onBlur={onBlur}
-                                      onSubmit={confirmSignUp}
-                                      onChange={onChange}/>
+                return <ConfirmSignUp authError={authError}
+                                      onConfirm={confirmSignUp}/>
             }
         }
     }

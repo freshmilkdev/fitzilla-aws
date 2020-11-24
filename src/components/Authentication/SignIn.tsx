@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -9,18 +9,15 @@ import Grid from '@material-ui/core/Grid';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {AuthForm} from "./AuthForm";
-import {FormTypeEnum, IAuthError} from "./Authentication";
+import {FormTypeEnum, IAuthError, ISignInFormInput} from "./Authentication";
 import {Typography} from "@material-ui/core";
+import {Controller, useForm} from "react-hook-form";
 
 
 type SignInProps = {
     email: string,
-    password: string,
-    errors: any,
     authError: IAuthError | null,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-    onBlur: (e: React.FocusEvent<HTMLInputElement>) => void,
-    onSubmit: (formData: any) => void,
+    onSignIn: Function,
     onChangeFormType: Function,
 }
 
@@ -31,19 +28,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const SignIn: React.FC<SignInProps> =
-    ({email, password, errors, authError, onSubmit, onChange, onBlur, onChangeFormType}) => {
+    ({email, authError, onChangeFormType, onSignIn}) => {
         const classes = useStyles();
+        const {handleSubmit, errors, control, setValue} = useForm<ISignInFormInput>();
+        const onSubmit = (data: ISignInFormInput) => onSignIn(data);
+        useEffect(() => {
+            setValue('email', email, {shouldDirty: true})
+        }, [email]);
+
         return (
-            <AuthForm header={'Sign In'}>
-                <TextField
-                    value={email}
+            <AuthForm header={'Sign In'} onSubmit={handleSubmit(onSubmit)}>
+                <Controller
+                    defaultValue=""
+                    as={TextField}
+                    control={control}
+                    rules={{
+                        required: {value: true, message: 'Required field'},
+                        pattern: {
+                            value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                            message: 'Please enter valid email'
+                        }
+                    }}
                     error={!!errors.email}
-                    helperText={errors.email || null}
-                    onChange={onChange}
-                    onBlur={onBlur}
+                    helperText={errors.email ? errors.email.message : null}
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     id="email"
                     label="Email Address"
@@ -51,15 +60,18 @@ export const SignIn: React.FC<SignInProps> =
                     autoComplete="email"
                     autoFocus
                 />
-                <TextField
-                    value={password}
+                <Controller
+                    defaultValue=""
+                    as={TextField}
+                    control={control}
+                    rules={{
+                        required: {value: true, message: 'Required field'},
+                        minLength: {value: 8, message: `Minimum length: 8`}
+                    }}
                     error={!!errors.password}
-                    helperText={errors.password || null}
-                    onChange={onChange}
-                    onBlur={onBlur}
+                    helperText={errors.password ? errors.password.message : null}
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     name="password"
                     label="Password"
@@ -73,11 +85,7 @@ export const SignIn: React.FC<SignInProps> =
                     label="Remember me"
                 />
                 <Button
-                    onClick={() => onSubmit({
-                        email,
-                        password
-                    })}
-                    type="button"
+                    type="submit"
                     fullWidth
                     variant="contained"
                     color="primary"

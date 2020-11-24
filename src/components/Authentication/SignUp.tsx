@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -7,20 +7,15 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from "@material-ui/core/Typography";
 import {makeStyles} from '@material-ui/core/styles';
-
+import {useForm, Controller} from "react-hook-form";
 import {AuthForm} from "./AuthForm";
-import {FormTypeEnum, IAuthError} from "./Authentication";
+import {FormTypeEnum, IAuthError, ISignUpFormInput} from "./Authentication";
 
 
 type SignUpProps = {
-    name: string,
     email: string,
-    password: string,
-    errors: any,
     authError: IAuthError | null,
-    onSubmit: () => void,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-    onBlur: (e: React.FocusEvent<HTMLInputElement>) => void,
+    onSignUp: Function,
     onChangeFormType: Function
 }
 
@@ -30,19 +25,25 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export const SignUp: React.FC<SignUpProps> =
-    ({name, email, password, errors, authError, onSubmit, onChange, onBlur, onChangeFormType}) => {
+    ({email, authError, onChangeFormType, onSignUp}) => {
         const classes = useStyles();
+        const {handleSubmit, errors, control, setValue} = useForm<ISignUpFormInput>();
+        const onSubmit = (data: ISignUpFormInput) => onSignUp(data);
+        useEffect(() => {
+            setValue('email', email, {shouldDirty: true})
+        }, [email]);
+        console.log(errors)
         return (
-            <AuthForm header={'Sign Up'}>
-                <TextField
-                    value={name}
-                    onChange={onChange}
-                    onBlur={onBlur}
+            <AuthForm header={'Sign Up'} onSubmit={handleSubmit(onSubmit)}>
+                <Controller
+                    defaultValue=""
+                    as={TextField}
+                    control={control}
+                    rules={{required: {value: true, message: 'Required field'},}}
                     error={!!errors.name}
-                    helperText={errors.name || null}
+                    helperText={errors.name ? errors.name.message : null}
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     id="email"
                     label="Name"
@@ -50,15 +51,21 @@ export const SignUp: React.FC<SignUpProps> =
                     autoComplete="name"
                     autoFocus
                 />
-                <TextField
-                    value={email}
-                    onChange={onChange}
-                    onBlur={onBlur}
+                <Controller
+                    defaultValue=""
+                    as={TextField}
+                    control={control}
+                    rules={{
+                        required: {value: true, message: 'Required field'},
+                        pattern: {
+                            value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                            message: 'Please enter valid email'
+                        }
+                    }}
                     error={!!errors.email}
-                    helperText={errors.email || null}
+                    helperText={errors.email ? errors.email.message : null}
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     id="email"
                     label="Email Address"
@@ -66,15 +73,18 @@ export const SignUp: React.FC<SignUpProps> =
                     autoComplete="email"
                     autoFocus
                 />
-                <TextField
-                    value={password}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    error={!!errors.password }
-                    helperText={errors.password || null}
+                <Controller
+                    defaultValue=""
+                    as={TextField}
+                    control={control}
+                    rules={{
+                        required: {value: true, message: 'Required field'},
+                        minLength: {value: 8, message: `Minimum length: 8`}
+                    }}
+                    error={!!errors.password}
+                    helperText={errors.password ? errors.password.message : null}
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     name="password"
                     label="Password"
@@ -89,12 +99,11 @@ export const SignUp: React.FC<SignUpProps> =
                     label="Remember me"
                 />
                 <Button
-                    type="button"
+                    type="submit"
                     fullWidth
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                    onClick={onSubmit}
                 >
                     Sign Up
                 </Button>

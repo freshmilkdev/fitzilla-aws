@@ -9,7 +9,8 @@ import Container from '@material-ui/core/Container';
 
 type AuthFormProps = {
     header: string,
-    children: React.ReactNode | null
+    children: React.ReactNode | null,
+    onSubmit: () => void
 }
 
 function Copyright() {
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export const AuthForm: React.FC<AuthFormProps> =
-    ({header, children}) => {
+    ({header, children, onSubmit}) => {
         const classes = useStyles();
         return (
             <Container component="main" maxWidth="xs">
@@ -49,7 +50,7 @@ export const AuthForm: React.FC<AuthFormProps> =
                     <Typography component="h1" variant="h5">
                         {header}
                     </Typography>
-                    <form className={classes.form} noValidate onSubmit={(e) => e.preventDefault()}>
+                    <form className={classes.form} onSubmit={onSubmit}>
                         {children}
                     </form>
                 </div>
