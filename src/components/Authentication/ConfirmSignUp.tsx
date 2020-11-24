@@ -1,11 +1,10 @@
-import React, {useEffect} from 'react';
-import Button from '@material-ui/core/Button';
+import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from "@material-ui/core/Typography";
-import {makeStyles} from '@material-ui/core/styles';
 import {AuthForm} from "./AuthForm";
 import {IAuthError, ISignUpConfirmInput} from "./Authentication";
 import {Controller, useForm} from "react-hook-form";
+import {SubmitButton} from "./SubmitButton";
 
 
 type ConfirmSignUpProps = {
@@ -13,14 +12,8 @@ type ConfirmSignUpProps = {
     onConfirm: Function
 }
 
-const useStyles = makeStyles((theme) => ({
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
 export const ConfirmSignUp: React.FC<ConfirmSignUpProps> =
     ({authError, onConfirm}) => {
-        const classes = useStyles();
         const {handleSubmit, errors, control} = useForm<ISignUpConfirmInput>();
         const onSubmit = (data: ISignUpConfirmInput) => onConfirm(data);
 
@@ -48,15 +41,7 @@ export const ConfirmSignUp: React.FC<ConfirmSignUpProps> =
                 />
 
                 {authError && <Typography color='error'>{authError.message}</Typography>}
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                >
-                    Confirm
-                </Button>
+                <SubmitButton label='Confirm'/>
             </AuthForm>
         )
     }
