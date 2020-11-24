@@ -1,21 +1,11 @@
 import {createSlice, createAsyncThunk, Action, AnyAction} from '@reduxjs/toolkit';
-import {IMuscleGroup} from "./muscleGroups";
 
+import {IExercise, IExerciseById, IMuscleGroup} from "../../shared/interfaces";
 
-export interface IExercise {
-    id: string,
-    name: string,
-}
-
-interface IExercisesList {
-    items: Array<IExercise>
-}
 
 interface IExercisesState {
     items: {
-        byId: {
-            [key: string]: IExercise
-        },
+        byId: IExerciseById,
         allIds: Array<string>
     }
 }

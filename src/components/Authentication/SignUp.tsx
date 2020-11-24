@@ -32,13 +32,13 @@ export const SignUp: React.FC<SignUpProps> =
                     defaultValue=""
                     as={TextField}
                     control={control}
-                    rules={{required: {value: true, message: 'Required field'},}}
+                    rules={{required: {value: true, message: 'Required field'}}}
                     error={!!errors.name}
                     helperText={errors.name ? errors.name.message : null}
                     variant="outlined"
                     margin="normal"
                     fullWidth
-                    id="email"
+                    id="name"
                     label="Name"
                     name="name"
                     autoComplete="name"

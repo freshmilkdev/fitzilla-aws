@@ -6,9 +6,9 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Badge from "@material-ui/core/Badge";
-import {IMuscleGroup} from "../../../../redux/slices/muscleGroups";
 import {MuscleGroupIcon} from "./MuscleGroupIcon";
 import {Box} from "@material-ui/core";
+import {IMuscleGroup} from "../../../../shared/interfaces";
 
 
 const useStyles = makeStyles((theme) => ({

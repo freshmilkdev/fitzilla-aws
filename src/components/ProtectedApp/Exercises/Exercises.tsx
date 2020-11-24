@@ -5,12 +5,13 @@ import AddIcon from '@material-ui/icons/Add';
 import {makeStyles} from '@material-ui/core/styles';
 import {useSelector} from "react-redux";
 import {RootState} from "../../../redux/rootReducer";
-import {IMuscleGroup} from "../../../redux/slices/muscleGroups";
+
 import {MuscleGroup} from "./MuscleGroup/MuscleGroup";
 
 import {MuscleGroupSkeleton} from "./MuscleGroup/MuscleGroupSkeleton";
 import {Link} from "react-router-dom";
 import {routes} from "../../../config/routes";
+import {IMuscleGroup} from "../../../shared/interfaces";
 
 let muscleGroupsSkeleton = Array(6).fill("");
 const useStyles = makeStyles((theme) => ({

@@ -2,7 +2,7 @@ import {createSlice, createAsyncThunk, Action, AnyAction} from '@reduxjs/toolkit
 import {API} from "aws-amplify";
 import * as queries from "../../graphql/queries";
 import * as mutations from "../../graphql/mutations";
-import {IExercise} from "./exercises";
+import {IMuscleGroup} from "../../shared/interfaces";
 
 export const fetchMuscleGroups = createAsyncThunk('muscleGroups/fetchMuscleGroups', async () => {
     const muscleGroups: any = await API.graphql({query: queries.listMuscleGroups});
@@ -18,30 +18,7 @@ export const createMuscleGroups = createAsyncThunk('muscleGroups/createMuscleGro
     return await Promise.all(createInitialMuscleGroups);
 });
 
-/*interface ICreateMuscleGroup {
-    id: string,
-    name: string,
-    owner: string,
-    createdAt: string,
-    updatedAt: string,
-    description: string | null,
-    exercises: Array<object>
-}
 
-interface ICreateMuscleGroupData {
-    data: ICreateMuscleGroup
-}*/
-
-export interface IExercisesList {
-    items: Array<IExercise>
-}
-export interface IMuscleGroup {
-    id: string,
-    name: string,
-    description?: string,
-    exercises: IExercisesList,
-    createdAt: string
-}
 interface IMuscleGroupsState {
     items: Array<IMuscleGroup>
     loading: boolean,

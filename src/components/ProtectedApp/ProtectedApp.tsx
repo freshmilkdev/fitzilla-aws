@@ -18,8 +18,7 @@ export interface IAuthContext {
 
 export const AuthContext = createContext<IAuthContext>({
     authUser: null,
-    signOut: () => {
-    }
+    signOut: () => {}
 });
 
 export const ProtectedApp: React.FC<ProtectedAppProps> = ({children}) => {
