@@ -9,6 +9,9 @@ import FormControl from '@material-ui/core/FormControl';
 import {useSelector} from "react-redux";
 import {RootState} from "../../../../redux/rootReducer";
 import {IExercise, IExerciseById, IMuscleGroup} from "../../../../shared/interfaces";
+import {createExercise} from "../../../../redux/slices/exercises";
+import {useAppDispatch} from "../../../../redux/store";
+import {routes} from "../../../../config/routes";
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -30,15 +33,23 @@ interface IExerciseRouterParams {
 }
 
 export const Exercise: React.FC = () => {
+    const dispatch = useAppDispatch();
+    let history = useHistory();
     const muscleGroups: Array<IMuscleGroup> = useSelector((state: RootState) => state.muscleGroups.items);
     const exercises: IExerciseById = useSelector((state: RootState) => state.exercises.items.byId);
+
     const {id} = useParams<IExerciseRouterParams>();
 
     const classes = useStyles();
 
     const {handleSubmit, errors, control, setValue, register, getValues, watch, reset} = useForm<IExercise>();
 
-    const onSubmit = (data: IExercise) => console.log(data);
+    const onSubmit = async (data: IExercise) => {
+        console.log(data)
+        dispatch(createExercise(data)).then(() => {
+            history.push(routes.EXERCISES.path);
+        });
+    };
 
     useEffect(() => {
         register({name: 'muscleGroupID'}, {required: true});

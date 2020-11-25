@@ -1,4 +1,6 @@
-export interface IExercise {
+import {CreateExerciseInput, CreateMuscleGroupInput} from "../API";
+
+export interface IExercise extends CreateExerciseInput {
     id: string,
     name: string,
     description: string,
@@ -7,14 +9,16 @@ export interface IExercise {
     muscleGroup: IMuscleGroup | null,
     muscleGroupID: string
 }
+
 export interface IExerciseById {
     [key: string]: IExercise
 }
+
 export interface IExercisesList {
     items: Array<IExercise>
 }
 
-export interface IMuscleGroup {
+export interface IMuscleGroup /*extends CreateMuscleGroupInput*/{
     id: string,
     name: string,
     description?: string,

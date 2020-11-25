@@ -1,8 +1,9 @@
-import {createSlice, createAsyncThunk, Action, AnyAction} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {API} from "aws-amplify";
 import * as queries from "../../graphql/queries";
 import * as mutations from "../../graphql/mutations";
 import {IMuscleGroup} from "../../shared/interfaces";
+import {isPendingAction, isRejectedAction} from "../store";
 
 export const fetchMuscleGroups = createAsyncThunk('muscleGroups/fetchMuscleGroups', async () => {
     const muscleGroups: any = await API.graphql({query: queries.listMuscleGroups});
@@ -31,17 +32,7 @@ const initialState: IMuscleGroupsState = {
     error: false
 }
 
-interface RejectedAction extends Action {
-    error: Error
-}
 
-function isRejectedAction(action: AnyAction): action is RejectedAction {
-    return action.type.endsWith('rejected')
-}
-
-function isPendingAction(action: AnyAction): action is Action {
-    return action.type.endsWith('pending')
-}
 
 const muscleGroupsSlice = createSlice({
     name: 'muscleGroups',

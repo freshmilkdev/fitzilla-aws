@@ -14,7 +14,7 @@ export const useMuscleGroupsExercises = (authUser: IAuthUser | null): Array<IMus
     useEffect(() => {
         if (!muscleGroups.length && authUser) {
             dispatch(fetchMuscleGroups()).then(({payload}) => {
-                payload.length ? dispatch(initExercises(payload)) : dispatch(createMuscleGroups());
+                (payload && payload.length) ? dispatch(initExercises(payload)) : dispatch(createMuscleGroups());
             });
         }
     }, [authUser]);

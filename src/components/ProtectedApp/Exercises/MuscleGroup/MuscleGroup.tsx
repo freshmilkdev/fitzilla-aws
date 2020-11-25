@@ -9,6 +9,7 @@ import Badge from "@material-ui/core/Badge";
 import {MuscleGroupIcon} from "./MuscleGroupIcon";
 import {Box} from "@material-ui/core";
 import {IMuscleGroup} from "../../../../shared/interfaces";
+import {ExercisesList} from "../ExerciseLIst/ExercisesList";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -17,10 +18,11 @@ const useStyles = makeStyles((theme) => ({
         overflow: 'hidden',
         borderBottom: `1px solid ${theme.palette.grey['300']}`
     },
-    accordionSummaryContent: {
+    summaryContent: {
         justifyContent: 'space-between',
         alignItems: 'center',
     },
+    detailsRoot: {padding: 0},
     heading: {
         fontSize: theme.typography.pxToRem(18),
         fontWeight: theme.typography.fontWeightRegular,
@@ -34,7 +36,7 @@ export const MuscleGroup: React.FC<IMuscleGroup> = ({id, name, exercises}: IMusc
         <Accordion square>
             <AccordionSummary
                 classes={{
-                    content: classes.accordionSummaryContent
+                    content: classes.summaryContent
                 }}
                 expandIcon={<ExpandMoreIcon/>}
                 aria-controls={`panel${id}-content`}
@@ -48,11 +50,8 @@ export const MuscleGroup: React.FC<IMuscleGroup> = ({id, name, exercises}: IMusc
 
                 <Badge color='secondary' badgeContent={Object.keys(exercises.items).length.toString()}/>
             </AccordionSummary>
-            <AccordionDetails>
-                <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                    sit amet blandit leo lobortis eget.
-                </Typography>
+            <AccordionDetails classes={{root: classes.detailsRoot}}>
+                <ExercisesList muscleGroupId={id}/>
             </AccordionDetails>
         </Accordion>
     </div>

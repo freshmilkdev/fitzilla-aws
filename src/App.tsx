@@ -17,6 +17,7 @@ function App() {
             <Route path={routes.AUTH.path} exact component={Authentication}/>
             <ProtectedRoute path={routes.HOME_PAGE.path} exact component={Home}/>
             <ProtectedRoute path={routes.EXERCISES.path} exact component={Exercises}/>
+            <ProtectedRoute path={`${routes.EXERCISE.path}/:id`} exact component={Exercise}/>
             <ProtectedRoute path={routes.EXERCISE.path} exact component={Exercise}/>
         </Switch>
     );
