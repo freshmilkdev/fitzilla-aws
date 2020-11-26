@@ -3,13 +3,11 @@ import {CreateExerciseInput} from "../../API";
 import * as mutations from "../../graphql/mutations";
 import {IExercise, IExerciseById, IMuscleGroup} from "../../shared/interfaces";
 import {API} from "aws-amplify";
-import * as queries from "../../graphql/queries";
-import {isPendingAction, isRejectedAction} from "../store";
 
 
 interface IExercisesState {
     loading: boolean,
-    error: boolean,
+    error: boolean | null,
     items: {
         byId: IExerciseById,
         allIds: Array<string>
@@ -18,7 +16,7 @@ interface IExercisesState {
 
 const initialState: IExercisesState = {
     loading: false,
-    error: false,
+    error: null,
     items: {
         byId: {},
         allIds: []
@@ -53,27 +51,17 @@ const exercisesSlice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(createExercise.fulfilled, (state: IExercisesState, action) => {
-             state.items.byId[action.payload.id] = action.payload;
-             state.items.allIds.push(action.payload.id);
-            console.log(action.payload)
-            /* state.items = action.payload;
-             state.loading = false;
-             state.error = false;*/
-        }).addMatcher(
-            isPendingAction,
-            // `action` will be inferred as a RejectedAction due to isRejectedAction being defined as a type guard
-            (state, action) => {
-                state.loading = true;
-                state.error = false;
-            }
-        ).addMatcher(
-            isRejectedAction,
-            // `action` will be inferred as a RejectedAction due to isRejectedAction being defined as a type guard
-            (state, action) => {
-                state.loading = false;
-                state.error = true;
-            }
-        )
+            state.items.byId[action.payload.id] = action.payload;
+            state.items.allIds.push(action.payload.id);
+            state.loading = false;
+            state.error = null;
+        }).addCase(createExercise.pending, (state: IExercisesState, action) => {
+            state.loading = true;
+            state.error = null;
+        }).addCase(createExercise.rejected, (state: IExercisesState, action) => {
+            state.loading = false;
+            state.error = true;
+        })
     }
 })
 export const exercisesReducer = exercisesSlice.reducer;
