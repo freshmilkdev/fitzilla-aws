@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import {Action, AsyncThunkAction, AsyncThunkPayloadCreator} from '@reduxjs/toolkit';
 import {useParams, useHistory, useLocation} from 'react-router-dom';
 import {Controller, useForm} from "react-hook-form";
 import TextField from "@material-ui/core/TextField";
@@ -9,7 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import {useSelector} from "react-redux";
 import {RootState} from "../../../../redux/rootReducer";
 import {IExercise, IExerciseById, IMuscleGroup} from "../../../../shared/interfaces";
-import {createExercise} from "../../../../redux/slices/exercises";
+import {createExercise, updateExercise} from "../../../../redux/slices/exercises";
 import {useAppDispatch} from "../../../../redux/store";
 import {routes} from "../../../../config/routes";
 
@@ -42,11 +43,15 @@ export const Exercise: React.FC = () => {
 
     const classes = useStyles();
 
-    const {handleSubmit, errors, control, setValue, register, getValues, watch, reset} = useForm<IExercise>();
+    const {handleSubmit, errors, control, setValue, register, watch, reset} = useForm<IExercise>();
 
     const onSubmit = async (data: IExercise) => {
-        console.log(data)
-        dispatch(createExercise(data)).then(() => {
+        const exerciseData: IExercise = {
+            ...data,
+            id
+        }
+        const action: AsyncThunkAction<any, any, any> = id ? updateExercise(exerciseData) : createExercise(exerciseData);
+        dispatch(action).then(() => {
             history.push(routes.EXERCISES.path);
         });
     };
@@ -60,7 +65,6 @@ export const Exercise: React.FC = () => {
         if (id && exercises) {
             reset(exercises[id]);
         }
-        console.log('a')
     }, [exercises, id, reset]);
 
     useEffect(() => {

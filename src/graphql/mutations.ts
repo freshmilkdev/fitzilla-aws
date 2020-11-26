@@ -27,7 +27,6 @@ export const createMuscleGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -56,7 +55,6 @@ export const updateMuscleGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -85,7 +83,6 @@ export const deleteMuscleGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -110,7 +107,6 @@ export const createExercise = /* GraphQL */ `
         }
         createdAt
         updatedAt
-        owner
       }
       createdAt
       updatedAt
@@ -139,7 +135,6 @@ export const updateExercise = /* GraphQL */ `
         }
         createdAt
         updatedAt
-        owner
       }
       createdAt
       updatedAt
@@ -168,7 +163,6 @@ export const deleteExercise = /* GraphQL */ `
         }
         createdAt
         updatedAt
-        owner
       }
       createdAt
       updatedAt

@@ -165,7 +165,6 @@ export type CreateMuscleGroupMutation = {
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -198,7 +197,6 @@ export type UpdateMuscleGroupMutation = {
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -231,7 +229,6 @@ export type DeleteMuscleGroupMutation = {
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -260,7 +257,6 @@ export type CreateExerciseMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -293,7 +289,6 @@ export type UpdateExerciseMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -326,7 +321,6 @@ export type DeleteExerciseMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -362,7 +356,6 @@ export type GetMuscleGroupQuery = {
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -386,7 +379,6 @@ export type ListMuscleGroupsQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -416,7 +408,6 @@ export type GetExerciseQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -448,7 +439,6 @@ export type ListExercisesQuery = {
         description: string | null,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null,
       createdAt: string,
       updatedAt: string,
@@ -456,10 +446,6 @@ export type ListExercisesQuery = {
     } | null > | null,
     nextToken: string | null,
   } | null,
-};
-
-export type OnCreateMuscleGroupSubscriptionVariables = {
-  owner: string,
 };
 
 export type OnCreateMuscleGroupSubscription = {
@@ -486,12 +472,7 @@ export type OnCreateMuscleGroupSubscription = {
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
-};
-
-export type OnUpdateMuscleGroupSubscriptionVariables = {
-  owner: string,
 };
 
 export type OnUpdateMuscleGroupSubscription = {
@@ -518,12 +499,7 @@ export type OnUpdateMuscleGroupSubscription = {
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
-};
-
-export type OnDeleteMuscleGroupSubscriptionVariables = {
-  owner: string,
 };
 
 export type OnDeleteMuscleGroupSubscription = {
@@ -550,7 +526,6 @@ export type OnDeleteMuscleGroupSubscription = {
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -578,7 +553,6 @@ export type OnCreateExerciseSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -610,7 +584,6 @@ export type OnUpdateExerciseSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
@@ -642,7 +615,6 @@ export type OnDeleteExerciseSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,

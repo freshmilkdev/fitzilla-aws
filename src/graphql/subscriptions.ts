@@ -3,8 +3,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateMuscleGroup = /* GraphQL */ `
-  subscription OnCreateMuscleGroup($owner: String!) {
-    onCreateMuscleGroup(owner: $owner) {
+  subscription OnCreateMuscleGroup {
+    onCreateMuscleGroup {
       id
       name
       description
@@ -24,13 +24,12 @@ export const onCreateMuscleGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
 export const onUpdateMuscleGroup = /* GraphQL */ `
-  subscription OnUpdateMuscleGroup($owner: String!) {
-    onUpdateMuscleGroup(owner: $owner) {
+  subscription OnUpdateMuscleGroup {
+    onUpdateMuscleGroup {
       id
       name
       description
@@ -50,13 +49,12 @@ export const onUpdateMuscleGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
 export const onDeleteMuscleGroup = /* GraphQL */ `
-  subscription OnDeleteMuscleGroup($owner: String!) {
-    onDeleteMuscleGroup(owner: $owner) {
+  subscription OnDeleteMuscleGroup {
+    onDeleteMuscleGroup {
       id
       name
       description
@@ -76,7 +74,6 @@ export const onDeleteMuscleGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -98,7 +95,6 @@ export const onCreateExercise = /* GraphQL */ `
         }
         createdAt
         updatedAt
-        owner
       }
       createdAt
       updatedAt
@@ -124,7 +120,6 @@ export const onUpdateExercise = /* GraphQL */ `
         }
         createdAt
         updatedAt
-        owner
       }
       createdAt
       updatedAt
@@ -150,7 +145,6 @@ export const onDeleteExercise = /* GraphQL */ `
         }
         createdAt
         updatedAt
-        owner
       }
       createdAt
       updatedAt

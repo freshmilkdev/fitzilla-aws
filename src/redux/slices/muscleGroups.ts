@@ -1,11 +1,13 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {API} from "aws-amplify";
 import * as queries from "../../graphql/queries";
+import * as mutations from "../../graphql/mutations";
 import {IMuscleGroup} from "../../shared/interfaces";
 
 export const fetchMuscleGroups = createAsyncThunk('muscleGroups/fetchMuscleGroups', async () => {
     const muscleGroups: any = await API.graphql({query: queries.listMuscleGroups});
-    return muscleGroups?.data.listMuscleGroups.items;
+    return muscleGroups?.data.listMuscleGroups.items
+        .sort((a: IMuscleGroup, b: IMuscleGroup) => a.name.localeCompare(b.name));
 });
 
 /*const initialMuscleGroups: Array<string> = ["Abs", "Arms", "Back", "Chest", "Legs", "Shoulders"];
@@ -16,7 +18,6 @@ export const createMuscleGroups = createAsyncThunk('muscleGroups/createMuscleGro
     }));
     return await Promise.all(createInitialMuscleGroups);
 });*/
-
 
 interface IMuscleGroupsState {
     items: Array<IMuscleGroup>

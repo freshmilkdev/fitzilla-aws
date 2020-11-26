@@ -1,4 +1,4 @@
-type MuscleGroup @model @auth(rules: [{ allow: owner }]) {
+type MuscleGroup @model @auth(rules: [{ allow: private, operations: [read]}]) {
     id: ID!
     name: String!
     description: String

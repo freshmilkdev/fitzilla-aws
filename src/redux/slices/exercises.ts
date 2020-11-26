@@ -1,8 +1,9 @@
 import {createSlice, createAsyncThunk, Action, AnyAction} from '@reduxjs/toolkit';
-import {CreateExerciseInput} from "../../API";
+import {CreateExerciseInput, UpdateExerciseInput} from "../../API";
 import * as mutations from "../../graphql/mutations";
 import {IExercise, IExerciseById, IMuscleGroup} from "../../shared/interfaces";
 import {API} from "aws-amplify";
+import {RejectedAction} from "../store";
 
 
 interface IExercisesState {
@@ -22,6 +23,15 @@ const initialState: IExercisesState = {
         allIds: []
     }
 }
+
+export function isRejectedAction(action: AnyAction): action is RejectedAction {
+    return action.type.includes('exercises/') && action.type.endsWith('rejected')
+}
+
+export function isPendingAction(action: AnyAction): action is Action {
+    return action.type.includes('exercises/') && action.type.endsWith('pending')
+}
+
 export const createExercise = createAsyncThunk('exercises/createExercise', async (exercise: CreateExerciseInput) => {
     const newExercise: any = await API.graphql({
         query: mutations.createExercise,
@@ -29,7 +39,13 @@ export const createExercise = createAsyncThunk('exercises/createExercise', async
     });
     return newExercise.data.createExercise;
 });
-
+export const updateExercise = createAsyncThunk('exercises/updateExercise', async (exercise: UpdateExerciseInput) => {
+    const updatedExercise: any = await API.graphql({
+        query: mutations.updateExercise,
+        variables: {input: exercise}
+    });
+    return updatedExercise.data.updateExercise;
+});
 
 const exercisesSlice = createSlice({
     name: 'exercises',
@@ -55,13 +71,26 @@ const exercisesSlice = createSlice({
             state.items.allIds.push(action.payload.id);
             state.loading = false;
             state.error = null;
-        }).addCase(createExercise.pending, (state: IExercisesState, action) => {
-            state.loading = true;
-            state.error = null;
-        }).addCase(createExercise.rejected, (state: IExercisesState, action) => {
+        }).addCase(updateExercise.fulfilled, (state: IExercisesState, action) => {
+            state.items.byId[action.payload.id] = action.payload;
             state.loading = false;
-            state.error = true;
-        })
+            state.error = null;
+        }).addMatcher(
+            isPendingAction,
+            // `action` will be inferred as a RejectedAction due to isRejectedAction being defined as a type guard
+            (state, action) => {
+                console.log('aga')
+                state.loading = true;
+                state.error = false;
+            }
+        ).addMatcher(
+            isRejectedAction,
+            // `action` will be inferred as a RejectedAction due to isRejectedAction being defined as a type guard
+            (state, action) => {
+                state.loading = false;
+                state.error = true;
+            }
+        )
     }
 })
 export const exercisesReducer = exercisesSlice.reducer;

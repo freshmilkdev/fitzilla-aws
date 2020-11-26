@@ -24,7 +24,6 @@ export const getMuscleGroup = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -40,7 +39,7 @@ export const listMuscleGroups = /* GraphQL */ `
         name
         description
         exercises {
-          items {
+        items {
           id
           name
           description
@@ -55,7 +54,6 @@ export const listMuscleGroups = /* GraphQL */ `
         }
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -79,7 +77,6 @@ export const getExercise = /* GraphQL */ `
         }
         createdAt
         updatedAt
-        owner
       }
       createdAt
       updatedAt
@@ -107,7 +104,6 @@ export const listExercises = /* GraphQL */ `
           description
           createdAt
           updatedAt
-          owner
         }
         createdAt
         updatedAt

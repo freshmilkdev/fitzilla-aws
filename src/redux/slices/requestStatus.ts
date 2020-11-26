@@ -1,7 +1,6 @@
 import {Action, AnyAction, createSlice} from '@reduxjs/toolkit';
-export interface RejectedAction extends Action {
-    error: Error
-}
+import {RejectedAction} from "../store";
+
 export function isRejectedAction(action: AnyAction): action is RejectedAction {
     return action.type.endsWith('rejected')
 }
@@ -40,7 +39,6 @@ const requestStatusSlice = createSlice({
                 state.error = true;
             }
         )
-
     }
 })
 export const requestStatusReducer = requestStatusSlice.reducer;

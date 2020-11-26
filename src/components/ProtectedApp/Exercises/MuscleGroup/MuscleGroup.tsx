@@ -8,8 +8,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Badge from "@material-ui/core/Badge";
 import {MuscleGroupIcon} from "./MuscleGroupIcon";
 import {Box} from "@material-ui/core";
-import {IMuscleGroup} from "../../../../shared/interfaces";
+import {IExerciseById, IMuscleGroup} from "../../../../shared/interfaces";
 import {ExercisesList} from "../ExerciseLIst/ExercisesList";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../../redux/rootReducer";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,8 +31,13 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(2)
     },
 }));
-export const MuscleGroup: React.FC<IMuscleGroup> = ({id, name, exercises}: IMuscleGroup) => {
+export const MuscleGroup: React.FC<IMuscleGroup> = ({id, name}: IMuscleGroup) => {
     const classes = useStyles();
+    const exercisesById: IExerciseById = useSelector((state: RootState) => state.exercises.items.byId);
+    const exercisesAll: Array<string> = useSelector((state: RootState) => state.exercises.items.allIds);
+    const exercises = exercisesAll
+        .filter((exerciseId) => exercisesById[exerciseId].muscleGroupID === id)
+        .map((exerciseId) => exercisesById[exerciseId]);
 
     return <div className={classes.root}>
         <Accordion square>
@@ -48,10 +55,10 @@ export const MuscleGroup: React.FC<IMuscleGroup> = ({id, name, exercises}: IMusc
                     <Typography className={classes.heading}>{name}</Typography>
                 </Box>
 
-                <Badge color='secondary' badgeContent={Object.keys(exercises.items).length.toString()}/>
+                <Badge color='secondary' badgeContent={Object.keys(exercises).length.toString()}/>
             </AccordionSummary>
             <AccordionDetails classes={{root: classes.detailsRoot}}>
-                <ExercisesList muscleGroupId={id}/>
+                <ExercisesList exercises={exercises}/>
             </AccordionDetails>
         </Accordion>
     </div>
