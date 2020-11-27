@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -7,10 +7,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import {IExercise} from "../../../../shared/interfaces";
 import {ExerciseListMenu} from "./ExerciseListMenu";
 
-
-export const ExercisesListItem: React.FC<IExercise> = (exercise): React.ReactElement => {
+export const ExercisesListItem: React.FC<IExercise> = memo((exercise): React.ReactElement => {
     const {id, name} = exercise;
     const labelId = `checkbox-list-label-${id}`;
+
     return (
         <ListItem key={id} button>
             <ListItemIcon>
@@ -26,4 +26,4 @@ export const ExercisesListItem: React.FC<IExercise> = (exercise): React.ReactEle
             </ListItemSecondaryAction>
         </ListItem>
     );
-};
+});

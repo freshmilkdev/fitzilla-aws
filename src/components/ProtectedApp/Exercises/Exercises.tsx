@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         bottom: 56 + theme.spacing(2),
         right: theme.spacing(2),
+        zIndex: 2
     },
 }));
 export const Exercises: React.FC = () => {

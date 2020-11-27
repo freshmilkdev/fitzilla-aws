@@ -1,5 +1,5 @@
 import {createSlice, createAsyncThunk, Action, AnyAction} from '@reduxjs/toolkit';
-import {CreateExerciseInput, UpdateExerciseInput} from "../../API";
+import {CreateExerciseInput, DeleteExerciseInput, UpdateExerciseInput} from "../../API";
 import * as mutations from "../../graphql/mutations";
 import {IExercise, IExerciseById, IMuscleGroup} from "../../shared/interfaces";
 import {API} from "aws-amplify";
@@ -46,6 +46,13 @@ export const updateExercise = createAsyncThunk('exercises/updateExercise', async
     });
     return updatedExercise.data.updateExercise;
 });
+export const deleteExercise = createAsyncThunk('exercises/deleteExercise', async (exercise: DeleteExerciseInput) => {
+    const updatedExercise: any = await API.graphql({
+        query: mutations.deleteExercise,
+        variables: {input: exercise}
+    });
+    return updatedExercise.data.deleteExercise;
+});
 
 const exercisesSlice = createSlice({
     name: 'exercises',
@@ -75,11 +82,17 @@ const exercisesSlice = createSlice({
             state.items.byId[action.payload.id] = action.payload;
             state.loading = false;
             state.error = null;
+        }).addCase(deleteExercise.fulfilled, (state: IExercisesState, action) => {
+            const {id} = action.payload;
+            const {[id]: remove, ...rest} = state.items.byId;
+            state.items.byId = {...rest};
+            state.items.allIds = state.items.allIds.filter(item => item !== id);
+            state.loading = false;
+            state.error = null;
         }).addMatcher(
             isPendingAction,
             // `action` will be inferred as a RejectedAction due to isRejectedAction being defined as a type guard
             (state, action) => {
-                console.log('aga')
                 state.loading = true;
                 state.error = false;
             }
